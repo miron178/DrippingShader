@@ -18,8 +18,11 @@ Shader "Custom/Paint"
         _PaintMetallic("Paint Metallic", Range(0,1)) = 0.0
         _PaintBlur("Paint Blur", Range(0,5)) = 1.0
         _PaintDisplacement("Paint Displacement", Range(-0.1,0.1)) = 0
+        _PaintNormalSmooth("Paint Normal Smoothing", Range(1,100)) = 20
+        _PaintMinDepth("Paint Min Depth", Range(0,1)) = 0
+        _PaintViscosity("Paint Viscosity", Range(0,1)) = 1
     }
-        SubShader
+    SubShader
     {
         Tags { "RenderType" = "Opaque" }
         LOD 300
@@ -28,7 +31,7 @@ Shader "Custom/Paint"
         //{
         //    Name "Paint Pass"
         //    CGPROGRAM
-        //    #include "UnityCustomRenderTexture.cginc"
+        //    #include "UnityCustomRenderTexture.cginc" m
         //    #pragma vertex CustomRenderTextureVertexShader
         //    #pragma fragment frag
         //    #pragma target 3.0
@@ -75,6 +78,10 @@ Shader "Custom/Paint"
         half _PaintMetallic;
         float _PaintBlur;
         float _PaintDisplacement;
+        float _PaintNormalSmooth;
+        float4 _PaintTex_TexelSize;
+        float _PaintMinDepth;
+        float _PaintViscosity;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -89,7 +96,17 @@ Shader "Custom/Paint"
             float paint = tex2D(_PaintTex, IN.uv_PaintTex);
             float paintMask = smoothstep(0, _PaintSmooth, paint) * _PaintIntensity;
             float mainMask = 1 - paintMask;
-            float3 paintNormal = float3(0,0,1);
+
+
+            //paint normal vector from bump map
+            float2 dist = _PaintTex_TexelSize * _PaintNormalSmooth;
+            float u1 = tex2D(_PaintTex, float2(IN.uv_PaintTex.x - dist.x, IN.uv_PaintTex.y));
+            float u2 = tex2D(_PaintTex, float2(IN.uv_PaintTex.x + dist.x, IN.uv_PaintTex.y));
+            float v1 = tex2D(_PaintTex, float2(IN.uv_PaintTex.x, IN.uv_PaintTex.y - dist.y));
+            float v2 = tex2D(_PaintTex, float2(IN.uv_PaintTex.x, IN.uv_PaintTex.y + dist.y));
+            float3 uGradient = float3(2 * dist.x, 0, u2 - u1);
+            float3 vGradient = float3(0, 2 * dist.y, v2 - v1);
+            float3 paintNormal = normalize(cross(uGradient, vGradient));
 
             //thicker paint == more blur
             float paintBlur = _PaintBlur * paint;
@@ -106,6 +123,7 @@ Shader "Custom/Paint"
             //main mat under paint
             o.Albedo.rgb += c.rgb * mainMask;
 
+            
 
             //Metallic and smoothness come from slider variables
             //o.Metallic = _Metallic;
