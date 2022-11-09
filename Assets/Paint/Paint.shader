@@ -8,9 +8,9 @@ Shader "Custom/Paint"
         _OcclusionTex("Occlusion map", 2D) = "white" {}
         _MetallicTex("Metallic map", 2D) = "black" {}
         _Metallic("Metallic", Range(0,1)) = 0.0
+        _Glossiness("Glossiness", Range(0,1)) = 0.5
 
-        _Glossiness("Smoothness", Range(0,1)) = 0.5
-        
+        _PaintGlossiness("Paint Glossiness", Range(0,1)) = 0.5
         _PaintSmooth("Paint Smoothness", Range(0,1)) = 0.1
         _PaintIntensity("Paint Intensity", Range(0,1)) = 1
         _PaintColor("Paint Color", Color) = (1,0,0,0.5)
@@ -18,7 +18,8 @@ Shader "Custom/Paint"
         _PaintMetallic("Paint Metallic", Range(0,1)) = 0.0
         _PaintBlur("Paint Blur", Range(0,5)) = 1.0
         _PaintDisplacement("Paint Displacement", Range(-0.1,0.1)) = 0
-        _PaintNormalSmooth("Paint Normal Smoothing", Range(1,100)) = 20
+        _PaintBumpStrength("Paint Bump Strength", Range(0,1)) = 0.1
+        _PaintBumpSmooth("Paint Bump Smoothing", Range(1,100)) = 10
         _PaintMinDepth("Paint Min Depth", Range(0,1)) = 0
         _PaintViscosity("Paint Viscosity", Range(0,1)) = 1
     }
@@ -72,13 +73,15 @@ Shader "Custom/Paint"
         fixed4 _Color;
         half _Metallic;
 
+        half _PaintGlossiness;
         float _PaintSmooth;
         float _PaintIntensity;
         float4 _PaintColor;
         half _PaintMetallic;
         float _PaintBlur;
         float _PaintDisplacement;
-        float _PaintNormalSmooth;
+        float _PaintBumpStrength;
+        float _PaintBumpSmooth;
         float4 _PaintTex_TexelSize;
         float _PaintMinDepth;
         float _PaintViscosity;
@@ -99,13 +102,13 @@ Shader "Custom/Paint"
 
 
             //paint normal vector from bump map
-            float2 dist = _PaintTex_TexelSize * _PaintNormalSmooth;
+            float2 dist = _PaintTex_TexelSize * _PaintBumpSmooth;
             float u1 = tex2D(_PaintTex, float2(IN.uv_PaintTex.x - dist.x, IN.uv_PaintTex.y));
             float u2 = tex2D(_PaintTex, float2(IN.uv_PaintTex.x + dist.x, IN.uv_PaintTex.y));
             float v1 = tex2D(_PaintTex, float2(IN.uv_PaintTex.x, IN.uv_PaintTex.y - dist.y));
             float v2 = tex2D(_PaintTex, float2(IN.uv_PaintTex.x, IN.uv_PaintTex.y + dist.y));
-            float3 uGradient = float3(2 * dist.x, 0, u2 - u1);
-            float3 vGradient = float3(0, 2 * dist.y, v2 - v1);
+            float3 uGradient = float3(2 * dist.x, 0, (u2 - u1) * _PaintBumpStrength);
+            float3 vGradient = float3(0, 2 * dist.y, (v2 - v1) * _PaintBumpStrength);
             float3 paintNormal = normalize(cross(uGradient, vGradient));
 
             //thicker paint == more blur
@@ -129,7 +132,7 @@ Shader "Custom/Paint"
             //o.Metallic = _Metallic;
             
             float metallic = tex2D(_MetallicTex, IN.uv_MetallicTex).a;
-            o.Smoothness = _Glossiness;
+            o.Smoothness = _Glossiness * mainMask + _PaintGlossiness * paintMask;
             o.Alpha = c.a;
             o.Normal = normalize(mainNormal * mainMask + paintNormal * paintMask);
             o.Occlusion = tex2D(_OcclusionTex, IN.uv_MainTex) * mainMask + paintMask;
