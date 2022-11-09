@@ -20,36 +20,12 @@ Shader "Custom/Paint"
         _PaintDisplacement("Paint Displacement", Range(-0.1,0.1)) = 0
         _PaintBumpStrength("Paint Bump Strength", Range(0,1)) = 0.1
         _PaintBumpSmooth("Paint Bump Smoothing", Range(1,100)) = 10
-        _PaintMinDepth("Paint Min Depth", Range(0,1)) = 0
-        _PaintViscosity("Paint Viscosity", Range(0,1)) = 1
     }
+
     SubShader
     {
         Tags { "RenderType" = "Opaque" }
         LOD 300
-
-        //Pass
-        //{
-        //    Name "Paint Pass"
-        //    CGPROGRAM
-        //    #include "UnityCustomRenderTexture.cginc" m
-        //    #pragma vertex CustomRenderTextureVertexShader
-        //    #pragma fragment frag
-        //    #pragma target 3.0
-
-        //    float4      _PaintColor;
-        //    sampler2D   _Paint;
-
-        //    float4 frag(v2f_customrendertexture IN) : COLOR
-        //    {
-        //        fixed4 col = 0;
-        //        col.rg = IN.localTexcoord.xy;
-        //        col.a = 0.5 ;
-        //        return col;
-        //        //return _PaintColor * tex2D(_Paint, IN.localTexcoord.xy);
-        //    }
-        //    ENDCG
-        //}
 
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
@@ -139,6 +115,26 @@ Shader "Custom/Paint"
             o.Metallic = metallic * _Metallic * mainMask + _PaintMetallic * paintMask;
         }
         ENDCG
+
+        //Pass
+        //{
+        //    name "Drip pass 2"
+        //    CGPROGRAM
+        //    #include "UnityCustomRenderTexture.cginc"
+        //    #pragma vertex CustomRenderTextureVertexShader
+        //    #pragma fragment frag
+        //    #pragma target 3.0
+
+        //    float4      _Color;
+        //    sampler2D   _MainTex;
+
+        //    float4 frag(v2f_customrendertexture IN) : COLOR
+        //    {
+        //        return _Color * tex2D(_MainTex, IN.localTexcoord.xy);
+        //    }
+        //    ENDCG
+        //}
+
     }
     FallBack "Diffuse"
 }
