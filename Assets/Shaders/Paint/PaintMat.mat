@@ -102,14 +102,14 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.2
+    - _Glossiness: 0.23
     - _GlossyReflections: 1
     - _Height: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _PainMetallic: 1
-    - _PaintBlur: 1.92
+    - _PaintBlur: 0.56
     - _PaintBumpSmooth: 9
     - _PaintBumpStrength: 0.01
     - _PaintDisplacement: -0.092
