@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Grass
+  m_Name: Grass Long
   m_Shader: {fileID: 4800000, guid: 01eab4087a959ef4cbc34b8a3fba1e1f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -66,13 +66,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _BendRotationRandom: 0.1
-    - _BladeCurve: 2
+    - _BladeCurve: 3
     - _BladeForward: 1
-    - _BladeHeight: 0.2
-    - _BladeHeightRandom: 0.1
+    - _BladeHeight: 0.3
+    - _BladeHeightRandom: 0.2
     - _BladeRandomAmount: 0.5
     - _BladeSegments: 3
-    - _BladeWidth: 0.1
+    - _BladeWidth: 0.2
     - _BladeWidthRandom: 0.1
     - _BumpScale: 1
     - _Cutoff: 0.5
