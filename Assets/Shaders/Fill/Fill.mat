@@ -50,7 +50,7 @@ Material:
     - _BUILTIN_ZTest: 4
     - _BUILTIN_ZWrite: 1
     - _BUILTIN_ZWriteControl: 0
-    - _Fill: 1
+    - _Fill: 0.5
     - _Opacity: 0.555
     - _WobbleX: 0
     - _WobbleZ: 0

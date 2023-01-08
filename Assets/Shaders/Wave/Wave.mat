@@ -82,17 +82,17 @@ Material:
     - _BUILTIN_QueueOffset: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _Density: 0.87
+    - _Density: 7
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EdgeBlend: 0.243
-    - _EffectRadius: 8.23
-    - _Frequency: 0.57
+    - _EdgeBlend: 0.01
+    - _EffectRadius: 20
+    - _Frequency: 0.2
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GradientEdge: 4.5
-    - _Height: 0.16
+    - _GradientEdge: 0.7
+    - _Height: 0.05
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -106,5 +106,5 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GradientColor: {r: 0.0039215675, g: 0.09817825, b: 0.39607844, a: 1}
-    - _Origin: {r: 0, g: 1, b: 0, a: 0}
+    - _Origin: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

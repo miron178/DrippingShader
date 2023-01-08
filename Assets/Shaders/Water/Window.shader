@@ -15,9 +15,11 @@ Shader "Unlit/Window"
         Tags { "RenderType"="Opaque" "Queue" = "Transparent"}
         LOD 100
 
-            GrabPass {"_GrabTexture"}
+        GrabPass {"_GrabTexture"}
+
         Pass
         {
+            Cull Off
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
