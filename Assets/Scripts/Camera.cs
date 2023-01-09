@@ -15,8 +15,7 @@ public class Camera : MonoBehaviour
     private void Update()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        distance += scroll;
-        Mathf.Clamp(distance, 0, 1);
+        distance = Mathf.Clamp(distance + scroll, 0, 1);
 
         transform.position = Vector3.Lerp(far.position, near.position, distance);
     }
